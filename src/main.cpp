@@ -1,18 +1,22 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Statistics.h"
 
-int WIDTH = 500, HEIGHT = 500;
+int WIDTH = 1366, HEIGHT = 697;
 int FPS = 60;
 
 int main() {
 	sf::ContextSettings settings;
 	settings.antialiasingLevel = 8;
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Graphs & Statistics", 7U, settings);
+	window.setFramerateLimit(FPS);
 
-	sf::CircleShape shape(100, 100);
-	shape.setFillColor(sf::Color::Red);
-	shape.setOrigin(100, 100);
-	shape.setPosition(250, 250);
+	LineGraph lineGraph("fonts/arial.ttf");
+	lineGraph.AddData(1, 2);
+	lineGraph.AddData(2, 4);
+	lineGraph.AddData(3, 8);
+	lineGraph.AddData(4, 5);
+	lineGraph.AddData(5.5, 10.3);
 
 	while (window.isOpen()) {
 		sf::Event event;
@@ -31,8 +35,8 @@ int main() {
 			}
 		}
 
-		window.clear();
-		window.draw(shape);
+		window.clear(sf::Color(139, 240, 72));
+		lineGraph.DrawGraph(window);
 		window.display();
 	}
 
