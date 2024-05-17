@@ -5,6 +5,8 @@
 #include <iostream>
 #include <unordered_map>
 
+#define PI 3.1415926535
+
 std::string RemoveTrailingZeroes(std::string number);
 
 class Point {
@@ -30,7 +32,24 @@ public:
 	int tickFontSize = 12, legendFontSize = 12, labelFontSize = 24, headingFontSize = 36;
 
 	LineGraph(const char* fontLocation);
-	void CreateDataSet(std::string name, sf::Color color);
-	void AddData(std::string name, float x, float y, std::string label = "");
+	void CreateDataSet(std::string datasetName, sf::Color color);
+	void AddData(std::string datasetName, float x, float y, std::string label = "");
 	void DrawGraph(sf::RenderWindow& window, bool drawPoints = true);
+};
+
+class PieChart {
+private:
+	sf::Font font;
+	sf::Text text;
+public:
+	std::unordered_map<std::string, float> data;
+	std::unordered_map<std::string, sf::Color> colors;
+	float graphXPosition = 683, graphYPosition = 348;
+	float radius = 200;
+	int percentFontSize = 12, legendFontSize = 12, headingFontSize = 36;
+	int pieChartPointCount = 100;
+
+	PieChart(const char* fontLocation);
+	void AddData(std::string name, float value, sf::Color color);
+	void DrawGraph(sf::RenderWindow& window);
 };

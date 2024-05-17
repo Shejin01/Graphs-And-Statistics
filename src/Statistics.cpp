@@ -21,13 +21,13 @@ LineGraph::LineGraph(const char* fontLocation) {
 	text.setFillColor(sf::Color::Black);
 }
 
-void LineGraph::CreateDataSet(std::string name, sf::Color color) {
-	datasets.insert({ name, std::vector<Point>() });
-	colors.insert({ name, color });
+void LineGraph::CreateDataSet(std::string datasetName, sf::Color color) {
+	datasets.insert({ datasetName, std::vector<Point>() });
+	colors.insert({ datasetName, color });
 }
 
-void LineGraph::AddData(std::string name, float x, float y, std::string label) {
-	datasets[name].push_back(Point(x, y, label));
+void LineGraph::AddData(std::string datasetName, float x, float y, std::string label) {
+	datasets[datasetName].push_back(Point(x, y, label));
 }
 
 void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints) {
@@ -125,3 +125,62 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints) {
 		index++;
 	}
 };
+
+
+PieChart::PieChart(const char* fontLocation) {
+	if (!font.loadFromFile(fontLocation)) {
+		std::cout << "Error while loading font.\n";
+	}
+	text.setFont(font);
+	text.setFillColor(sf::Color::Black);
+}
+void PieChart::AddData(std::string name, float value, sf::Color color) {
+	data.insert({ name, value });
+	colors.insert({ name, color });
+}
+void PieChart::DrawGraph(sf::RenderWindow& window) {
+	float total = 0;
+	for (auto i = data.begin(); i != data.end(); i++) {
+		total += i->second;
+	}
+
+	/*
+	   __
+	  /  \
+	 /    \
+	|      |
+	|      |
+	 \    /
+      \  /
+	   --
+	
+	*/
+	
+
+	sf::ConvexShape shape;
+	float angle = 0;
+	float anglePerPoint = 2 * PI / pieChartPointCount;
+	for (auto value = data.begin(); value != data.end(); value++) {
+		float percentage = value->second / total;
+		int pointCount = ceil(pieChartPointCount * percentage) + 1;
+		shape.setPointCount(pointCount);
+		shape.setFillColor(colors[value->first]);
+		shape.setOutlineColor(sf::Color::Black);
+		shape.setOutlineThickness(1);
+		shape.setPoint(0, sf::Vector2f(graphXPosition, graphYPosition));
+		float endAngle = 2 * PI * percentage + angle;
+		float x, y;
+		for (int i = 1; i < pointCount-1; i++) {
+			x = graphXPosition + radius * cos(angle);
+			y = graphYPosition + radius * sin(angle);
+			shape.setPoint(i, sf::Vector2f(x, y));
+			angle += anglePerPoint;
+		}
+		angle = endAngle;
+		x = graphXPosition + radius * cos(angle);
+		y = graphYPosition + radius * sin(angle);
+		shape.setPoint(pointCount - 1, sf::Vector2f(x, y));
+
+		window.draw(shape);
+	}
+}
