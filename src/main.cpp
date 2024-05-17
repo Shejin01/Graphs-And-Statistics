@@ -13,26 +13,27 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Graphs & Statistics", 7U, settings);
 	window.setFramerateLimit(FPS);
 
-	/*LineGraph lineGraph("fonts/arial.ttf");
-
+	LineGraph lineGraph("fonts/arial.ttf");
+	lineGraph.graphXPosition = 183;
 	lineGraph.heading = "Graph";
 	lineGraph.CreateDataSet("Sine Wave", sf::Color::Black);
-	lineGraph.CreateDataSet("Cosine Wave", sf::Color::Red);*/
+	lineGraph.CreateDataSet("Cosine Wave", sf::Color::Red);
 
 	PieChart pieChart("fonts/arial.ttf");
+	pieChart.graphXPosition = 933;
 	pieChart.heading = "Pie Chart";
-	pieChart.AddData("Red", 450, sf::Color::Red);
-	pieChart.AddData("Green", 350, sf::Color::Green);
-	pieChart.AddData("Blue", 200, sf::Color::Blue);
+	pieChart.AddData("Red", 90, sf::Color::Red);
+	pieChart.AddData("Green", 70, sf::Color::Green);
+	pieChart.AddData("Blue", 40, sf::Color::Blue);
 	
-	//float t = 0;
+	float t = 0;
 	while (window.isOpen()) {
-		/*lineGraph.AddData("Sine Wave", t * 0.1, sin(t * 0.1) + 5);
+		lineGraph.AddData("Sine Wave", t * 0.1, sin(t * 0.1) + 5);
 		lineGraph.AddData("Cosine Wave", t * 0.1, cos(t * 0.1) + 5);
 		t++;
 		if (lineGraph.datasets["Sine Wave"].size() > 200) lineGraph.datasets["Sine Wave"].erase(lineGraph.datasets["Sine Wave"].begin());
 		if (lineGraph.datasets["Cosine Wave"].size() > 200) lineGraph.datasets["Cosine Wave"].erase(lineGraph.datasets["Cosine Wave"].begin());
-		if (t * 0.1 > lineGraph.graphWidth / lineGraph.xTickSpacing) lineGraph.xTickStart += 0.1;*/
+		if (t * 0.1 > lineGraph.graphWidth / lineGraph.xTickSpacing) lineGraph.xTickStart += 0.1;
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -51,7 +52,7 @@ int main() {
 		}
 
 		window.clear(sf::Color(139, 240, 72));
-		//lineGraph.DrawGraph(window, false);
+		lineGraph.DrawGraph(window, false);
 		pieChart.DrawGraph(window);
 		window.display();
 	}
