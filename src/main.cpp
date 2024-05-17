@@ -20,10 +20,10 @@ int main() {
 	lineGraph.CreateDataSet("Cosine Wave", sf::Color::Red);*/
 
 	PieChart pieChart("fonts/arial.ttf");
-	pieChart.pieChartPointCount = 100;
-	pieChart.AddData("Red", 500, sf::Color::Red);
-	pieChart.AddData("Green", 250, sf::Color::Green);
-	pieChart.AddData("Blue", 250, sf::Color::Blue);
+	pieChart.heading = "Pie Chart";
+	pieChart.AddData("Red", 450, sf::Color::Red);
+	pieChart.AddData("Green", 350, sf::Color::Green);
+	pieChart.AddData("Blue", 200, sf::Color::Blue);
 	
 	//float t = 0;
 	while (window.isOpen()) {

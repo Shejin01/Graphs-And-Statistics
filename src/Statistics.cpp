@@ -20,16 +20,13 @@ LineGraph::LineGraph(const char* fontLocation) {
 	text.setFont(font);
 	text.setFillColor(sf::Color::Black);
 }
-
 void LineGraph::CreateDataSet(std::string datasetName, sf::Color color) {
 	datasets.insert({ datasetName, std::vector<Point>() });
 	colors.insert({ datasetName, color });
 }
-
 void LineGraph::AddData(std::string datasetName, float x, float y, std::string label) {
 	datasets[datasetName].push_back(Point(x, y, label));
 }
-
 void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints) {
 	sf::RectangleShape boundingBox(sf::Vector2f(graphWidth, graphHeight));
 	boundingBox.setFillColor(sf::Color::White);
@@ -138,24 +135,11 @@ void PieChart::AddData(std::string name, float value, sf::Color color) {
 	data.insert({ name, value });
 	colors.insert({ name, color });
 }
-void PieChart::DrawGraph(sf::RenderWindow& window) {
+void PieChart::DrawGraph(sf::RenderWindow& window, bool showPercentage) {
 	float total = 0;
 	for (auto i = data.begin(); i != data.end(); i++) {
 		total += i->second;
 	}
-
-	/*
-	   __
-	  /  \
-	 /    \
-	|      |
-	|      |
-	 \    /
-      \  /
-	   --
-	
-	*/
-	
 
 	sf::ConvexShape shape;
 	float angle = 0;
@@ -182,5 +166,40 @@ void PieChart::DrawGraph(sf::RenderWindow& window) {
 		shape.setPoint(pointCount - 1, sf::Vector2f(x, y));
 
 		window.draw(shape);
+	}
+
+	text.setCharacterSize(headingFontSize);
+	text.setString(heading);
+	text.setPosition(graphXPosition - text.getLocalBounds().width * 0.5, graphYPosition - radius - text.getLocalBounds().height*2);
+	window.draw(text);
+
+	// Legend
+	sf::RectangleShape icon(sf::Vector2f(legendFontSize, legendFontSize));
+	icon.setOutlineColor(sf::Color::Black);
+	icon.setOutlineThickness(1);
+	text.setCharacterSize(legendFontSize);
+	int index = 0;
+	for (auto color = colors.begin(); color != colors.end(); color++) {
+		text.setString(color->first);
+		icon.setFillColor(color->second);
+		icon.setPosition(graphXPosition + radius + 10, graphYPosition - radius + legendFontSize + 5 + index * 30);
+		text.setPosition(icon.getPosition().x + legendFontSize + 5, icon.getPosition().y);
+		window.draw(icon);
+		window.draw(text);
+		index++;
+	}
+
+	// Percentage Text
+	text.setCharacterSize(percentFontSize);
+	angle = 0;
+	for (auto value = data.begin(); value != data.end(); value++) {
+		float percentage = value->second / total;
+		text.setString(RemoveTrailingZeroes(std::to_string(percentage*100)) + "%");
+		float percentAngle = angle + PI * percentage;
+		float x = graphXPosition + radius*0.5 * cos(percentAngle);
+		float y = graphYPosition + radius*0.5 * sin(percentAngle);
+		angle += 2 * PI * percentage;
+		text.setPosition(x, y);
+		window.draw(text);
 	}
 }
