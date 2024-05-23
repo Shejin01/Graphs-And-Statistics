@@ -1,6 +1,9 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Statistics.h"
+#include "LineGraph.h"
+#include "PieChart.h"
+#include "Histogram.h"
 
 int WIDTH = 1366, HEIGHT = 697;
 int FPS = 60;
@@ -19,12 +22,12 @@ int main() {
 	lineGraph.CreateDataSet("Sine Wave", sf::Color::Black);
 	lineGraph.CreateDataSet("Cosine Wave", sf::Color::Red);
 
-	/*PieChart pieChart("fonts/arial.ttf");
+	PieChart pieChart("fonts/arial.ttf");
 	pieChart.graphXPosition = 933;
 	pieChart.heading = "Pie Chart";
 	pieChart.AddData("Red", 90, sf::Color::Red);
 	pieChart.AddData("Green", 70, sf::Color::Green);
-	pieChart.AddData("Blue", 40, sf::Color::Blue);*/
+	pieChart.AddData("Blue", 40, sf::Color::Blue);
 	
 	/*Histogram histogram("fonts/arial.ttf");
 	histogram.color = sf::Color::Blue;
@@ -64,7 +67,7 @@ int main() {
 
 		window.clear(sf::Color(139, 240, 72));
 		lineGraph.DrawGraph(window, false);
-		//pieChart.DrawGraph(window);
+		pieChart.DrawGraph(window);
 		//histogram.DrawGraph(window);
 		window.display();
 	}

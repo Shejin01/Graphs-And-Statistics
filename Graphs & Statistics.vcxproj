@@ -147,10 +147,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Histogram.cpp" />
+    <ClCompile Include="src\LineGraph.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\PieChart.cpp" />
     <ClCompile Include="src\Statistics.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Histogram.h" />
+    <ClInclude Include="src\LineGraph.h" />
+    <ClInclude Include="src\PieChart.h" />
     <ClInclude Include="src\Statistics.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
