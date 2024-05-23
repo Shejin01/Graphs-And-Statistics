@@ -20,6 +20,10 @@ class LineGraph {
 private:
 	sf::Font font;
 	sf::Text text;
+	sf::RectangleShape boundingBox;
+	sf::VertexArray tick{ sf::Lines };
+	int xTickAmount, yTickAmount;
+	std::vector<sf::VertexArray> graphs;
 public:
 	std::unordered_map<std::string, std::vector<Point>> datasets;
 	std::unordered_map<std::string, sf::Color> colors;
@@ -34,6 +38,7 @@ public:
 	LineGraph(const char* fontLocation);
 	void CreateDataSet(std::string datasetName, sf::Color color);
 	void AddData(std::string datasetName, float x, float y, std::string label = "");
+	void UpdateGraph();
 	void DrawGraph(sf::RenderWindow& window, bool drawPoints = true);
 };
 
