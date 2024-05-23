@@ -13,5 +13,5 @@ class Point {
 public:
 	float x, y;
 	std::string label;
-	Point(float x, float y, std::string label = "");
+	Point(float x, float y, std::string label = "") : x(x), y(y), label(label) {}
 };

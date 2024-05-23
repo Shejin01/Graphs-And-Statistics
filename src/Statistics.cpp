@@ -10,5 +10,3 @@ std::string RemoveTrailingZeroes(std::string number) {
 	}
 	return number;
 }
-
-Point::Point(float x, float y, std::string label) : x(x), y(y), label(label) {}

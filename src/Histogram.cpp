@@ -12,39 +12,62 @@ void Histogram::AddData(float value) {
 	data.push_back(value);
 }
 
-void Histogram::DrawGraph(sf::RenderWindow& window) {
-	sf::RectangleShape boundingBox(sf::Vector2f(graphWidth, graphHeight));
+void Histogram::UpdateGraph() {
+	sf::RectangleShape rect;
+	rect.setFillColor(color);
+	rect.setOutlineColor(sf::Color::Black);
+	rect.setOutlineThickness(1);
+	for (int i = 0; i < data.size(); i++) {
+		if (data[i] < yTickStart || i * classWidth < xTickStart) continue;
+		rect.setSize(sf::Vector2f(xTickSpacing / xScale, data[i] * yTickSpacing / yScale));
+		rect.setPosition(graphXPosition + rect.getSize().x * i, graphYPosition + graphHeight - rect.getSize().y);
+	}
+}
+
+void Histogram::UpdateGraphBase() {
+	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
 	boundingBox.setFillColor(sf::Color::White);
 	boundingBox.setOutlineColor(sf::Color::Black);
 	boundingBox.setOutlineThickness(1);
 	boundingBox.setPosition(graphXPosition, graphYPosition);
+
+	xTickAmount = graphWidth / xTickSpacing;
+	yTickAmount = graphHeight / yTickSpacing;
+
+	tick.clear();
+	for (int i = 0; i < xTickAmount; i++) {
+		tick.append(sf::Vertex(
+			sf::Vector2f(graphXPosition + i * xTickSpacing, graphYPosition + graphHeight - 10),
+			sf::Color::Black
+		));
+		tick.append(tick[tick.getVertexCount() - 1]);
+		tick[tick.getVertexCount() - 1].position.y += 20;
+	}
+	for (int i = 0; i < yTickAmount; i++) {
+		tick.append(sf::Vertex(
+			sf::Vector2f(graphXPosition - 10, graphYPosition + graphHeight - i * yTickSpacing),
+			sf::Color::Black
+		));
+		tick.append(tick[tick.getVertexCount() - 1]);
+		tick[tick.getVertexCount() - 1].position.x += 20;
+	}
+}
+
+void Histogram::DrawGraph(sf::RenderWindow& window) {
 	window.draw(boundingBox);
 
 	// Ticks
 	text.setCharacterSize(tickFontSize);
-	int xTickAmount = graphWidth / xTickSpacing, yTickAmount = graphHeight / yTickSpacing;
-	sf::VertexArray tick(sf::LinesStrip, 2);
-	tick[0].color = sf::Color::Black;
-	tick[1].color = sf::Color::Black;
-	tick[0].position.y = graphYPosition + graphHeight - 10;
-	tick[1].position.y = graphYPosition + graphHeight + 10;
+	window.draw(tick);
 	for (int i = 0; i < xTickAmount; i++) {
-		tick[0].position.x = graphXPosition + i * xTickSpacing;
-		tick[1].position.x = graphXPosition + i * xTickSpacing;
-		window.draw(tick);
 		text.setString(RemoveTrailingZeroes(std::to_string((xScale * i + xTickStart) * classWidth)));
-		text.setPosition(tick[0].position.x - (text.getLocalBounds().width * 0.5), tick[0].position.y + 20);
+		text.setPosition(graphXPosition + i * xTickSpacing - (text.getLocalBounds().width * 0.5), graphYPosition + graphHeight - 10 + 20);
 		window.draw(text);
 	}
 
-	tick[0].position.x = graphXPosition - 10;
-	tick[1].position.x = graphXPosition + 10;
 	for (int i = 0; i < yTickAmount; i++) {
-		tick[0].position.y = graphYPosition + graphHeight - i * yTickSpacing;
-		tick[1].position.y = graphYPosition + graphHeight - i * yTickSpacing;
-		window.draw(tick);
 		text.setString(RemoveTrailingZeroes(std::to_string(yScale * i + yTickStart)));
-		text.setPosition(tick[0].position.x - (text.getLocalBounds().width) - 5, tick[0].position.y - (text.getLocalBounds().height));
+		text.setPosition(graphXPosition - 10 - (text.getLocalBounds().width) - 5, graphYPosition + graphHeight - i * yTickSpacing - (text.getLocalBounds().height));
 		window.draw(text);
 	}
 

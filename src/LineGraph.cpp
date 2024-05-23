@@ -48,7 +48,8 @@ void LineGraph::UpdateGraphBase() {
 	boundingBox.setOutlineThickness(1);
 	boundingBox.setPosition(graphXPosition, graphYPosition);
 
-	xTickAmount = graphWidth / xTickSpacing, yTickAmount = graphHeight / yTickSpacing;
+	xTickAmount = graphWidth / xTickSpacing;
+	yTickAmount = graphHeight / yTickSpacing;
 
 	tick.clear();
 	for (int i = 0; i < xTickAmount; i++) {
