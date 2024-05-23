@@ -37,6 +37,7 @@ int main() {
 	histogram.AddData(4);
 	histogram.AddData(3);*/
 
+	lineGraph.UpdateGraphBase();
 	lineGraph.UpdateGraph();
 
 	float t = 0;

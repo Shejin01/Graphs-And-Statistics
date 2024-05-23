@@ -7,9 +7,11 @@ Histogram::Histogram(const char* fontLocation) {
 	text.setFont(font);
 	text.setFillColor(sf::Color::Black);
 }
+
 void Histogram::AddData(float value) {
 	data.push_back(value);
 }
+
 void Histogram::DrawGraph(sf::RenderWindow& window) {
 	sf::RectangleShape boundingBox(sf::Vector2f(graphWidth, graphHeight));
 	boundingBox.setFillColor(sf::Color::White);

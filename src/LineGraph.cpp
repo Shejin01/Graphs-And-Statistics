@@ -7,42 +7,18 @@ LineGraph::LineGraph(const char* fontLocation) {
 	text.setFont(font);
 	text.setFillColor(sf::Color::Black);
 }
+
 void LineGraph::CreateDataSet(std::string datasetName, sf::Color color) {
 	datasets.insert({ datasetName, std::vector<Point>() });
 	colors.insert({ datasetName, color });
 }
+
 void LineGraph::AddData(std::string datasetName, float x, float y, std::string label) {
 	datasets[datasetName].push_back(Point(x, y, label));
 }
+
 void LineGraph::UpdateGraph() {
-	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
-	boundingBox.setFillColor(sf::Color::White);
-	boundingBox.setOutlineColor(sf::Color::Black);
-	boundingBox.setOutlineThickness(1);
-	boundingBox.setPosition(graphXPosition, graphYPosition);
-
-	xTickAmount = graphWidth / xTickSpacing, yTickAmount = graphHeight / yTickSpacing;
-
-	tick.clear();
 	for (auto& graph : graphs) graph.clear();
-
-	for (int i = 0; i < xTickAmount; i++) {
-		tick.append(sf::Vertex(
-			sf::Vector2f(graphXPosition + i * xTickSpacing, graphYPosition + graphHeight - 10),
-			sf::Color::Black
-		));
-		tick.append(tick[tick.getVertexCount() - 1]);
-		tick[tick.getVertexCount() - 1].position.y += 20;
-	}
-
-	for (int i = 0; i < yTickAmount; i++) {
-		tick.append(sf::Vertex(
-			sf::Vector2f(graphXPosition - 10, graphYPosition + graphHeight - i * yTickSpacing),
-			sf::Color::Black
-		));
-		tick.append(tick[tick.getVertexCount() - 1]);
-		tick[tick.getVertexCount() - 1].position.x += 20;
-	}
 
 	int graphIndex = 0;
 	for (auto data = datasets.begin(); data != datasets.end(); data++) {
@@ -64,6 +40,36 @@ void LineGraph::UpdateGraph() {
 		graphIndex++;
 	}
 }
+
+void LineGraph::UpdateGraphBase() {
+	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
+	boundingBox.setFillColor(sf::Color::White);
+	boundingBox.setOutlineColor(sf::Color::Black);
+	boundingBox.setOutlineThickness(1);
+	boundingBox.setPosition(graphXPosition, graphYPosition);
+
+	xTickAmount = graphWidth / xTickSpacing, yTickAmount = graphHeight / yTickSpacing;
+
+	tick.clear();
+	for (int i = 0; i < xTickAmount; i++) {
+		tick.append(sf::Vertex(
+			sf::Vector2f(graphXPosition + i * xTickSpacing, graphYPosition + graphHeight - 10),
+			sf::Color::Black
+		));
+		tick.append(tick[tick.getVertexCount() - 1]);
+		tick[tick.getVertexCount() - 1].position.y += 20;
+	}
+
+	for (int i = 0; i < yTickAmount; i++) {
+		tick.append(sf::Vertex(
+			sf::Vector2f(graphXPosition - 10, graphYPosition + graphHeight - i * yTickSpacing),
+			sf::Color::Black
+		));
+		tick.append(tick[tick.getVertexCount() - 1]);
+		tick[tick.getVertexCount() - 1].position.x += 20;
+	}
+}
+
 void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints) {
 	window.draw(boundingBox);
 

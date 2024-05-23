@@ -7,10 +7,12 @@ PieChart::PieChart(const char* fontLocation) {
 	text.setFont(font);
 	text.setFillColor(sf::Color::Black);
 }
+
 void PieChart::AddData(std::string name, float value, sf::Color color) {
 	data.insert({ name, value });
 	colors.insert({ name, color });
 }
+
 void PieChart::DrawGraph(sf::RenderWindow& window, bool showPercentage) {
 	float total = 0;
 	for (auto i = data.begin(); i != data.end(); i++) {
