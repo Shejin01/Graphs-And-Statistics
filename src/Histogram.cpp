@@ -24,7 +24,7 @@ void Histogram::UpdateGraph() {
 	}
 }
 
-void Histogram::UpdateGraphBase() {
+void Histogram::UpdateGraphSettings() {
 	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
 	boundingBox.setFillColor(sf::Color::White);
 	boundingBox.setOutlineColor(sf::Color::Black);

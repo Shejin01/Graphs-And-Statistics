@@ -41,7 +41,7 @@ void LineGraph::UpdateGraph() {
 	}
 }
 
-void LineGraph::UpdateGraphBase() {
+void LineGraph::UpdateGraphSettings() {
 	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
 	boundingBox.setFillColor(sf::Color::White);
 	boundingBox.setOutlineColor(sf::Color::Black);

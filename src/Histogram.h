@@ -24,6 +24,6 @@ public:
 	Histogram(const char* fontLocation);
 	void AddData(float value);
 	void UpdateGraph();
-	void UpdateGraphBase();
+	void UpdateGraphSettings();
 	void DrawGraph(sf::RenderWindow& window);
 };

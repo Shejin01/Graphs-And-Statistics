@@ -24,6 +24,6 @@ public:
 	void CreateDataSet(std::string datasetName, sf::Color color);
 	void AddData(std::string datasetName, float x, float y, std::string label = "");
 	void UpdateGraph();
-	void UpdateGraphBase();
+	void UpdateGraphSettings();
 	void DrawGraph(sf::RenderWindow& window, bool drawPoints = true);
 };
