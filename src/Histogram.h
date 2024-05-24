@@ -9,10 +9,9 @@ private:
 	sf::RectangleShape boundingBox;
 	sf::VertexArray tick{sf::Lines};
 	int xTickAmount = 0, yTickAmount = 0;
-	
 public:
-	std::vector<float> data;
-	sf::Color color;
+	std::unordered_map<std::string, std::vector<float>> datasets;
+	std::unordered_map<std::string, sf::Color> colors;
 	std::string xLabel = "Class Interval", yLabel = "Frequency", heading = "";
 	float xScale = 1, yScale = 1;
 	float xTickSpacing = 40, yTickSpacing = 40;
@@ -23,7 +22,8 @@ public:
 	float classWidth = 5;
 
 	Histogram(const char* fontLocation);
-	void AddData(float value);
+	void CreateDataSet(std::string datasetName, sf::Color color);
+	void AddData(std::string datasetName, float value);
 	void UpdateGraphSettings();
 	void DrawGraph(sf::RenderWindow& window);
 };

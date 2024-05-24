@@ -8,8 +8,13 @@ Histogram::Histogram(const char* fontLocation) {
 	text.setFillColor(sf::Color::Black);
 }
 
-void Histogram::AddData(float value) {
-	data.push_back(value);
+void Histogram::CreateDataSet(std::string datasetName, sf::Color color) {
+	datasets.insert({ datasetName, std::vector<float>()});
+	colors.insert({ datasetName, color });
+}
+
+void Histogram::AddData(std::string datasetName, float value) {
+	datasets[datasetName].push_back(value);
 }
 
 void Histogram::UpdateGraphSettings() {
@@ -75,13 +80,33 @@ void Histogram::DrawGraph(sf::RenderWindow& window) {
 
 	// Rectangles
 	sf::RectangleShape rect;
-	rect.setFillColor(color);
 	rect.setOutlineColor(sf::Color::Black);
 	rect.setOutlineThickness(1);
-	for (int i = 0; i < data.size(); i++) {
-		if (data[i] < yTickStart || i * classWidth < xTickStart) continue;
-		rect.setSize(sf::Vector2f(xTickSpacing / xScale, data[i] * yTickSpacing / yScale));
-		rect.setPosition(graphXPosition + rect.getSize().x * i, graphYPosition + graphHeight - rect.getSize().y);
-		window.draw(rect);
+	int index = 0;
+	for (auto data = datasets.begin(); data != datasets.end(); data++) {
+		rect.setFillColor(colors[data->first]);
+		for (int i = 0; i < data->second.size(); i++) {
+			if (data->second[i] < yTickStart || i * classWidth < xTickStart) continue;
+			rect.setSize(sf::Vector2f(xTickSpacing / (xScale * datasets.size()), data->second[i] * yTickSpacing / yScale));
+			rect.setPosition(graphXPosition + rect.getSize().x * (i * datasets.size() + index), graphYPosition + graphHeight - rect.getSize().y);
+			window.draw(rect);
+		}
+		index++;
+	}
+
+	// Legend
+	sf::RectangleShape icon(sf::Vector2f(legendFontSize, legendFontSize));
+	icon.setOutlineColor(sf::Color::Black);
+	icon.setOutlineThickness(1);
+	text.setCharacterSize(legendFontSize);
+	index = 0;
+	for (auto color = colors.begin(); color != colors.end(); color++) {
+		icon.setFillColor(color->second);
+		icon.setPosition(graphXPosition + graphWidth - 100, graphYPosition + 20 + index * 30);
+		text.setString(color->first);
+		text.setPosition(icon.getPosition().x + 20, icon.getPosition().y);
+		window.draw(icon);
+		window.draw(text);
+		index++;
 	}
 }
