@@ -13,38 +13,51 @@ void PieChart::AddData(std::string name, float value, sf::Color color) {
 	colors.insert({ name, color });
 }
 
-void PieChart::DrawGraph(sf::RenderWindow& window, bool showPercentage) {
-	float total = 0;
+void PieChart::UpdateGraph() {
 	for (auto i = data.begin(); i != data.end(); i++) {
 		total += i->second;
 	}
 
-	sf::ConvexShape shape;
 	float angle = 0;
 	float anglePerPoint = 2 * PI / pieChartPointCount;
+	int shapeIndex = 0;;
 	for (auto value = data.begin(); value != data.end(); value++) {
 		float percentage = value->second / total;
 		int pointCount = ceil(pieChartPointCount * percentage) + 1;
-		shape.setPointCount(pointCount);
-		shape.setFillColor(colors[value->first]);
-		shape.setOutlineColor(sf::Color::Black);
-		shape.setOutlineThickness(1);
-		shape.setPoint(0, sf::Vector2f(graphXPosition, graphYPosition));
+		shapes.push_back(sf::ConvexShape());
+		shapes[shapeIndex].setPointCount(pointCount);
+		shapes[shapeIndex].setFillColor(colors[value->first]);
+		shapes[shapeIndex].setOutlineColor(sf::Color::Black);
+		shapes[shapeIndex].setOutlineThickness(1);
+		shapes[shapeIndex].setPoint(0, sf::Vector2f(graphXPosition, graphYPosition));
 		float endAngle = 2 * PI * percentage + angle;
 		float x, y;
 		for (int i = 1; i < pointCount - 1; i++) {
 			x = graphXPosition + radius * cos(angle);
 			y = graphYPosition + radius * sin(angle);
-			shape.setPoint(i, sf::Vector2f(x, y));
+			shapes[shapeIndex].setPoint(i, sf::Vector2f(x, y));
 			angle += anglePerPoint;
 		}
 		angle = endAngle;
 		x = graphXPosition + radius * cos(angle);
 		y = graphYPosition + radius * sin(angle);
-		shape.setPoint(pointCount - 1, sf::Vector2f(x, y));
-
-		window.draw(shape);
+		shapes[shapeIndex].setPoint(pointCount - 1, sf::Vector2f(x, y));
+		shapeIndex++;
 	}
+
+	angle = 0;
+	for (auto value = data.begin(); value != data.end(); value++) {
+		float percentage = value->second / total;
+		float percentAngle = angle + PI * percentage;
+		float x = graphXPosition + radius * 0.5 * cos(percentAngle);
+		float y = graphYPosition + radius * 0.5 * sin(percentAngle);
+		angle += 2 * PI * percentage;
+		percentTextPos.push_back(sf::Vector2f(x, y));
+	}
+}
+
+void PieChart::DrawGraph(sf::RenderWindow& window, bool showPercentage) {
+	for (auto& shape : shapes) window.draw(shape);
 
 	text.setCharacterSize(headingFontSize);
 	text.setString(heading);
@@ -69,15 +82,12 @@ void PieChart::DrawGraph(sf::RenderWindow& window, bool showPercentage) {
 
 	// Percentage Text
 	text.setCharacterSize(percentFontSize);
-	angle = 0;
+	int textPosIndex = 0;
 	for (auto value = data.begin(); value != data.end(); value++) {
 		float percentage = value->second / total;
 		text.setString(RemoveTrailingZeroes(std::to_string(percentage * 100)) + "%");
-		float percentAngle = angle + PI * percentage;
-		float x = graphXPosition + radius * 0.5 * cos(percentAngle);
-		float y = graphYPosition + radius * 0.5 * sin(percentAngle);
-		angle += 2 * PI * percentage;
-		text.setPosition(x, y);
+		text.setPosition(percentTextPos[textPosIndex]);
 		window.draw(text);
+		textPosIndex++;
 	}
 }

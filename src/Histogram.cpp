@@ -12,18 +12,6 @@ void Histogram::AddData(float value) {
 	data.push_back(value);
 }
 
-void Histogram::UpdateGraph() {
-	sf::RectangleShape rect;
-	rect.setFillColor(color);
-	rect.setOutlineColor(sf::Color::Black);
-	rect.setOutlineThickness(1);
-	for (int i = 0; i < data.size(); i++) {
-		if (data[i] < yTickStart || i * classWidth < xTickStart) continue;
-		rect.setSize(sf::Vector2f(xTickSpacing / xScale, data[i] * yTickSpacing / yScale));
-		rect.setPosition(graphXPosition + rect.getSize().x * i, graphYPosition + graphHeight - rect.getSize().y);
-	}
-}
-
 void Histogram::UpdateGraphSettings() {
 	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
 	boundingBox.setFillColor(sf::Color::White);

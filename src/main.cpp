@@ -4,6 +4,7 @@
 #include "LineGraph.h"
 #include "PieChart.h"
 #include "Histogram.h"
+#include <chrono>
 
 int WIDTH = 1366, HEIGHT = 697;
 int FPS = 60;
@@ -21,6 +22,8 @@ int main() {
 	lineGraph.heading = "Graph";
 	lineGraph.CreateDataSet("Sine Wave", sf::Color::Black);
 	lineGraph.CreateDataSet("Cosine Wave", sf::Color::Red);
+	lineGraph.UpdateGraphSettings();
+	lineGraph.UpdateGraph();
 
 	PieChart pieChart("fonts/arial.ttf");
 	pieChart.graphXPosition = 933;
@@ -28,6 +31,7 @@ int main() {
 	pieChart.AddData("Red", 90, sf::Color::Red);
 	pieChart.AddData("Green", 70, sf::Color::Green);
 	pieChart.AddData("Blue", 40, sf::Color::Blue);
+	pieChart.UpdateGraph();
 	
 	/*Histogram histogram("fonts/arial.ttf");
 	histogram.color = sf::Color::Blue;
@@ -37,11 +41,14 @@ int main() {
 	histogram.AddData(4);
 	histogram.AddData(3);*/
 
-	lineGraph.UpdateGraphBase();
-	lineGraph.UpdateGraph();
-
 	float t = 0;
+
+	/*std::chrono::high_resolution_clock::time_point start;
+	std::chrono::high_resolution_clock::time_point end;
+	float fps;*/
 	while (window.isOpen()) {
+		start = std::chrono::high_resolution_clock::now();
+
 		lineGraph.AddData("Sine Wave", t * 0.1, sin(t * 0.1) + 5);
 		lineGraph.AddData("Cosine Wave", t * 0.1, cos(t * 0.1) + 5);
 		t++;
@@ -71,6 +78,10 @@ int main() {
 		pieChart.DrawGraph(window);
 		//histogram.DrawGraph(window);
 		window.display();
+
+		/*end = std::chrono::high_resolution_clock::now();
+		fps = (float)1e9 / (float)std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
+		std::cout << "Fps: " << fps << '\n';*/
 	}
 
 	return 0;

@@ -25,5 +25,5 @@ public:
 	void AddData(std::string datasetName, float x, float y, std::string label = "");
 	void UpdateGraph();
 	void UpdateGraphSettings();
-	void DrawGraph(sf::RenderWindow& window, bool drawPoints = true);
+	void DrawGraph(sf::RenderWindow& window, bool drawPoints = true, bool drawLines = true);
 };

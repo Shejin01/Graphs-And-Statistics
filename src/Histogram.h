@@ -9,6 +9,7 @@ private:
 	sf::RectangleShape boundingBox;
 	sf::VertexArray tick{sf::Lines};
 	int xTickAmount = 0, yTickAmount = 0;
+	
 public:
 	std::vector<float> data;
 	sf::Color color;
@@ -23,7 +24,6 @@ public:
 
 	Histogram(const char* fontLocation);
 	void AddData(float value);
-	void UpdateGraph();
 	void UpdateGraphSettings();
 	void DrawGraph(sf::RenderWindow& window);
 };

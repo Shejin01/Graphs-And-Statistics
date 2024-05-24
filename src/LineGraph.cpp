@@ -71,7 +71,7 @@ void LineGraph::UpdateGraphSettings() {
 	}
 }
 
-void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints) {
+void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLines) {
 	window.draw(boundingBox);
 
 	// Ticks
@@ -124,8 +124,10 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints) {
 			graphIndex++;
 		}
 	}
-	for (int i = 0; i < graphs.size(); i++)
-		window.draw(graphs[i]);
+	if (drawLines) {
+		for (int i = 0; i < graphs.size(); i++)
+			window.draw(graphs[i]);
+	}
 
 	// Legend
 	sf::RectangleShape icon(sf::Vector2f(legendFontSize, legendFontSize));
