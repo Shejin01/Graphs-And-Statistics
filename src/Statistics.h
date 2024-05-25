@@ -8,6 +8,7 @@
 #define PI 3.1415926535
 
 std::string RemoveTrailingZeroes(std::string number);
+void RenderText(std::string text, int fontSize, sf::Vector2f position, sf::RenderWindow& window);
 
 class Point {
 public:

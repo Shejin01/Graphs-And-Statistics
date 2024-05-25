@@ -152,12 +152,14 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\PieChart.cpp" />
     <ClCompile Include="src\Statistics.cpp" />
+    <ClCompile Include="src\TextRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Histogram.h" />
     <ClInclude Include="src\LineGraph.h" />
     <ClInclude Include="src\PieChart.h" />
     <ClInclude Include="src\Statistics.h" />
+    <ClInclude Include="src\TextRenderer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

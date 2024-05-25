@@ -1,13 +1,5 @@
 #include "PieChart.h"
 
-PieChart::PieChart(const char* fontLocation) {
-	if (!font.loadFromFile(fontLocation)) {
-		std::cout << "Error while loading font.\n";
-	}
-	text.setFont(font);
-	text.setFillColor(sf::Color::Black);
-}
-
 void PieChart::AddData(std::string name, float value, sf::Color color) {
 	data.insert({ name, value });
 	colors.insert({ name, color });
@@ -59,35 +51,30 @@ void PieChart::UpdateGraph() {
 void PieChart::DrawGraph(sf::RenderWindow& window, bool showPercentage) {
 	for (auto& shape : shapes) window.draw(shape);
 
-	text.setCharacterSize(headingFontSize);
-	text.setString(heading);
-	text.setPosition(graphXPosition - text.getLocalBounds().width * 0.5, graphYPosition - radius - text.getLocalBounds().height * 2);
-	window.draw(text);
+	TextRenderer::SetFontSize(headingFontSize);
+	TextRenderer::RenderText(heading, graphXPosition - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - radius - TextRenderer::text.getLocalBounds().height * 2);
 
 	// Legend
 	sf::RectangleShape icon(sf::Vector2f(legendFontSize, legendFontSize));
 	icon.setOutlineColor(sf::Color::Black);
 	icon.setOutlineThickness(1);
-	text.setCharacterSize(legendFontSize);
+	TextRenderer::SetFontSize(legendFontSize);
 	int index = 0;
 	for (auto color = colors.begin(); color != colors.end(); color++) {
-		text.setString(color->first);
 		icon.setFillColor(color->second);
 		icon.setPosition(graphXPosition + radius + 10, graphYPosition - radius + legendFontSize + 5 + index * 30);
-		text.setPosition(icon.getPosition().x + legendFontSize + 5, icon.getPosition().y);
 		window.draw(icon);
-		window.draw(text);
+		TextRenderer::RenderText(color->first, icon.getPosition().x + legendFontSize + 5, icon.getPosition().y);
 		index++;
 	}
 
 	// Percentage Text
-	text.setCharacterSize(percentFontSize);
+	TextRenderer::SetFontSize(percentFontSize);
 	int textPosIndex = 0;
 	for (auto value = data.begin(); value != data.end(); value++) {
 		float percentage = value->second / total;
-		text.setString(RemoveTrailingZeroes(std::to_string(percentage * 100)) + "%");
-		text.setPosition(percentTextPos[textPosIndex]);
-		window.draw(text);
+
+		TextRenderer::RenderText(RemoveTrailingZeroes(std::to_string(percentage * 100)) + "%", percentTextPos[textPosIndex]);
 		textPosIndex++;
 	}
 }

@@ -5,6 +5,7 @@
 #include "PieChart.h"
 #include "Histogram.h"
 #include <chrono>
+#include "TextRenderer.h"
 
 int WIDTH = 1366, HEIGHT = 697;
 int FPS = 60;
@@ -17,7 +18,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Graphs & Statistics", 7U, settings);
 	window.setFramerateLimit(FPS);
 
-	/*LineGraph lineGraph("fonts/arial.ttf");
+	LineGraph lineGraph;
 	lineGraph.graphXPosition = 183;
 	lineGraph.heading = "Graph";
 	lineGraph.CreateDataSet("Sine Wave", sf::Color::Black);
@@ -25,15 +26,15 @@ int main() {
 	lineGraph.UpdateGraphSettings();
 	lineGraph.UpdateGraph();
 
-	PieChart pieChart("fonts/arial.ttf");
+	PieChart pieChart;
 	pieChart.graphXPosition = 933;
 	pieChart.heading = "Pie Chart";
 	pieChart.AddData("Red", 90, sf::Color::Red);
 	pieChart.AddData("Green", 70, sf::Color::Green);
 	pieChart.AddData("Blue", 40, sf::Color::Blue);
-	pieChart.UpdateGraph();*/
+	pieChart.UpdateGraph();
 	
-	Histogram histogram("fonts/arial.ttf");
+	/*Histogram histogram;
 	histogram.heading = "Histogram";
 	histogram.CreateDataSet("Blue", sf::Color::Blue);
 	histogram.AddData("Blue", 1);
@@ -45,23 +46,25 @@ int main() {
 	histogram.AddData("Red", 1);
 	histogram.AddData("Red", 4);
 	histogram.AddData("Red", 2);
-	histogram.UpdateGraphSettings();
+	histogram.UpdateGraphSettings();*/
+
+	TextRenderer::LoadFont("fonts/arial.ttf");
+	TextRenderer::AttachWindow(&window);
 
 	float t = 0;
-
 	std::chrono::high_resolution_clock::time_point start;
 	std::chrono::high_resolution_clock::time_point end;
 	float fps;
 	while (window.isOpen()) {
 		start = std::chrono::high_resolution_clock::now();
 
-		/*lineGraph.AddData("Sine Wave", t * 0.1, sin(t * 0.1) + 5);
+		lineGraph.AddData("Sine Wave", t * 0.1, sin(t * 0.1) + 5);
 		lineGraph.AddData("Cosine Wave", t * 0.1, cos(t * 0.1) + 5);
 		t++;
 		if (lineGraph.datasets["Sine Wave"].size() > 200) lineGraph.datasets["Sine Wave"].erase(lineGraph.datasets["Sine Wave"].begin());
 		if (lineGraph.datasets["Cosine Wave"].size() > 200) lineGraph.datasets["Cosine Wave"].erase(lineGraph.datasets["Cosine Wave"].begin());
 		if (t * 0.1 > lineGraph.graphWidth / lineGraph.xTickSpacing) lineGraph.xTickStart += 0.1;
-		lineGraph.UpdateGraph();*/
+		lineGraph.UpdateGraph();
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -80,9 +83,9 @@ int main() {
 		}
 
 		window.clear(sf::Color(139, 240, 72));
-		//lineGraph.DrawGraph(window, false);
-		//pieChart.DrawGraph(window);
-		histogram.DrawGraph(window);
+		lineGraph.DrawGraph(window, false);
+		pieChart.DrawGraph(window);
+		//histogram.DrawGraph(window);
 		window.display();
 
 		end = std::chrono::high_resolution_clock::now();

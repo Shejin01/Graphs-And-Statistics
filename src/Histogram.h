@@ -1,11 +1,10 @@
 #pragma once
 
 #include "Statistics.h"
+#include "TextRenderer.h"
 
 class Histogram {
 private:
-	sf::Font font;
-	sf::Text text;
 	sf::RectangleShape boundingBox;
 	sf::VertexArray tick{sf::Lines};
 	int xTickAmount = 0, yTickAmount = 0;
@@ -21,7 +20,6 @@ public:
 	int tickFontSize = 12, legendFontSize = 12, labelFontSize = 24, headingFontSize = 36;
 	float classWidth = 5;
 
-	Histogram(const char* fontLocation);
 	void CreateDataSet(std::string datasetName, sf::Color color);
 	void AddData(std::string datasetName, float value);
 	void UpdateGraphSettings();

@@ -1,13 +1,5 @@
 #include "Histogram.h"
 
-Histogram::Histogram(const char* fontLocation) {
-	if (!font.loadFromFile(fontLocation)) {
-		std::cout << "Error while loading font.\n";
-	}
-	text.setFont(font);
-	text.setFillColor(sf::Color::Black);
-}
-
 void Histogram::CreateDataSet(std::string datasetName, sf::Color color) {
 	datasets.insert({ datasetName, std::vector<float>()});
 	colors.insert({ datasetName, color });
@@ -50,33 +42,29 @@ void Histogram::DrawGraph(sf::RenderWindow& window) {
 	window.draw(boundingBox);
 
 	// Ticks
-	text.setCharacterSize(tickFontSize);
+	TextRenderer::SetFontSize(tickFontSize);
 	window.draw(tick);
 	for (int i = 0; i < xTickAmount; i++) {
-		text.setString(RemoveTrailingZeroes(std::to_string((xScale * i + xTickStart) * classWidth)));
-		text.setPosition(graphXPosition + i * xTickSpacing - (text.getLocalBounds().width * 0.5), graphYPosition + graphHeight - 10 + 20);
-		window.draw(text);
+		TextRenderer::RenderText(
+			RemoveTrailingZeroes(std::to_string((xScale * i + xTickStart) * classWidth)),
+			graphXPosition + i * xTickSpacing - (TextRenderer::text.getLocalBounds().width * 0.5), graphYPosition + graphHeight - 10 + 20
+		);
 	}
 
 	for (int i = 0; i < yTickAmount; i++) {
-		text.setString(RemoveTrailingZeroes(std::to_string(yScale * i + yTickStart)));
-		text.setPosition(graphXPosition - 10 - (text.getLocalBounds().width) - 5, graphYPosition + graphHeight - i * yTickSpacing - (text.getLocalBounds().height));
-		window.draw(text);
+		TextRenderer::RenderText(
+			RemoveTrailingZeroes(std::to_string(yScale * i + yTickStart)),
+			graphXPosition - 10 - (TextRenderer::text.getLocalBounds().width) - 5, graphYPosition + graphHeight - i * yTickSpacing - (TextRenderer::text.getLocalBounds().height)
+		);
 	}
 
-	text.setCharacterSize(labelFontSize);
-	text.setString(xLabel);
-	text.setPosition(graphXPosition + graphWidth * 0.5 - (text.getLocalBounds().width * 0.5), graphYPosition + graphWidth + 40);
-	window.draw(text);
-	text.setString(yLabel);
-	text.setPosition(graphXPosition - 40, graphYPosition + graphHeight * 0.5 - (text.getLocalBounds().width * 0.5));
-	text.setRotation(90);
-	window.draw(text);
-	text.setRotation(0);
-	text.setCharacterSize(headingFontSize);
-	text.setString(heading);
-	text.setPosition(graphXPosition + graphWidth * 0.5 - text.getLocalBounds().width * 0.5, graphYPosition - text.getLocalBounds().height - 20);
-	window.draw(text);
+	TextRenderer::SetFontSize(labelFontSize);
+	TextRenderer::RenderText(xLabel, graphXPosition + graphWidth * 0.5 - (TextRenderer::text.getLocalBounds().width * 0.5), graphYPosition + graphWidth + 40);
+	TextRenderer::text.setRotation(90);
+	TextRenderer::RenderText(yLabel, graphXPosition - 40, graphYPosition + graphHeight * 0.5 - (TextRenderer::text.getLocalBounds().width * 0.5));
+	TextRenderer::text.setRotation(0);
+	TextRenderer::SetFontSize(headingFontSize);
+	TextRenderer::RenderText(heading, graphXPosition + graphWidth * 0.5 - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - TextRenderer::text.getLocalBounds().height - 20);
 
 	// Rectangles
 	sf::RectangleShape rect;
@@ -98,15 +86,13 @@ void Histogram::DrawGraph(sf::RenderWindow& window) {
 	sf::RectangleShape icon(sf::Vector2f(legendFontSize, legendFontSize));
 	icon.setOutlineColor(sf::Color::Black);
 	icon.setOutlineThickness(1);
-	text.setCharacterSize(legendFontSize);
+	TextRenderer::SetFontSize(legendFontSize);
 	index = 0;
 	for (auto color = colors.begin(); color != colors.end(); color++) {
 		icon.setFillColor(color->second);
 		icon.setPosition(graphXPosition + graphWidth - 100, graphYPosition + 20 + index * 30);
-		text.setString(color->first);
-		text.setPosition(icon.getPosition().x + 20, icon.getPosition().y);
 		window.draw(icon);
-		window.draw(text);
+		TextRenderer::RenderText(color->first, icon.getPosition().x + 20, icon.getPosition().y);
 		index++;
 	}
 }
