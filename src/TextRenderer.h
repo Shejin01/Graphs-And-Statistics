@@ -26,6 +26,28 @@ public:
 		text.setCharacterSize(fontSize);
 	}
 
+	static void SetPosition(float x, float y) {
+		text.setPosition(x, y);
+	}
+
+	static void SetPosition(sf::Vector2f position) {
+		text.setPosition(position);
+	}
+
+	static void SetString(std::string textString) {
+		text.setString(textString);
+	}
+
+	static void RenderText(float x, float y) {
+		text.setPosition(x, y);
+		window->draw(text);
+	}
+
+	static void RenderText(sf::Vector2f position) {
+		text.setPosition(position);
+		window->draw(text);
+	}
+
 	static void RenderText(std::string textString, float x, float y) {
 		text.setString(textString);
 		text.setPosition(x, y);

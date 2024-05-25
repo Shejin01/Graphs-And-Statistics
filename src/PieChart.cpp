@@ -52,7 +52,8 @@ void PieChart::DrawGraph(sf::RenderWindow& window, bool showPercentage) {
 	for (auto& shape : shapes) window.draw(shape);
 
 	TextRenderer::SetFontSize(headingFontSize);
-	TextRenderer::RenderText(heading, graphXPosition - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - radius - TextRenderer::text.getLocalBounds().height * 2);
+	TextRenderer::SetString(heading);
+	TextRenderer::RenderText(graphXPosition - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - radius - TextRenderer::text.getLocalBounds().height * 2);
 
 	// Legend
 	sf::RectangleShape icon(sf::Vector2f(legendFontSize, legendFontSize));

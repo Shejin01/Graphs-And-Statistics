@@ -70,26 +70,25 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLi
 	window.draw(tick);
 	TextRenderer::SetFontSize(tickFontSize);
 	for (int i = 0; i < xTickAmount; i++) {
-		TextRenderer::RenderText(
-			RemoveTrailingZeroes(std::to_string(xScale * i + xTickStart)),
-			graphXPosition + i * xTickSpacing - (TextRenderer::text.getLocalBounds().width * 0.5), graphYPosition + graphHeight - 10 + 20
-		);
+		TextRenderer::SetString(RemoveTrailingZeroes(std::to_string(xScale * i + xTickStart)));
+		TextRenderer::RenderText(graphXPosition + i * xTickSpacing - (TextRenderer::text.getLocalBounds().width * 0.5), graphYPosition + graphHeight - 10 + 20);
 	}
 
 	for (int i = 0; i < yTickAmount; i++) {
-		TextRenderer::RenderText(
-			RemoveTrailingZeroes(std::to_string(yScale * i + yTickStart)),
-			graphXPosition - 10 - (TextRenderer::text.getLocalBounds().width) - 5, graphYPosition + graphHeight - i * yTickSpacing - (TextRenderer::text.getLocalBounds().height)
-		);
+		TextRenderer::SetString(RemoveTrailingZeroes(std::to_string(yScale * i + yTickStart)));
+		TextRenderer::RenderText(graphXPosition - 10 - (TextRenderer::text.getLocalBounds().width) - 5, graphYPosition + graphHeight - i * yTickSpacing - (TextRenderer::text.getLocalBounds().height));
 	}
 
 	TextRenderer::SetFontSize(labelFontSize);
-	TextRenderer::RenderText(xLabel, graphXPosition + graphWidth * 0.5 - (TextRenderer::text.getLocalBounds().width * 0.5), graphYPosition + graphWidth + 40);
+	TextRenderer::SetString(xLabel);
+	TextRenderer::RenderText(graphXPosition + graphWidth * 0.5 - (TextRenderer::text.getLocalBounds().width * 0.5), graphYPosition + graphWidth + 40);
+	TextRenderer::SetString(yLabel);
 	TextRenderer::text.setRotation(90);
-	TextRenderer::RenderText(yLabel, graphXPosition - 40, graphYPosition + graphHeight * 0.5 - (TextRenderer::text.getLocalBounds().width * 0.5));
+	TextRenderer::RenderText(graphXPosition - 40, graphYPosition + graphHeight * 0.5 - (TextRenderer::text.getLocalBounds().width * 0.5));
 	TextRenderer::text.setRotation(0);
 	TextRenderer::SetFontSize(headingFontSize);
-	TextRenderer::RenderText(heading, graphXPosition + graphWidth * 0.5 - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - TextRenderer::text.getLocalBounds().height - 20);
+	TextRenderer::SetString(heading);
+	TextRenderer::RenderText(graphXPosition + graphWidth * 0.5 - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - TextRenderer::text.getLocalBounds().height - 20);
 
 	// Line
 	if (drawPoints) {
@@ -127,7 +126,7 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLi
 		icon.setFillColor(color->second);
 		icon.setPosition(graphXPosition + graphWidth - 100, graphYPosition + 20 + index * 30);
 		window.draw(icon);
-		TextRenderer::RenderText(color->first, { icon.getPosition().x + 20, icon.getPosition().y });
+		TextRenderer::RenderText(color->first, icon.getPosition().x + 20, icon.getPosition().y);
 		index++;
 	}
 };
