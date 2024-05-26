@@ -9,6 +9,36 @@ void Histogram::AddData(std::string datasetName, float value) {
 	datasets[datasetName].push_back(value);
 }
 
+void Histogram::UpdateGraph() {
+	graphs = std::vector<sf::VertexArray>(datasets.size());
+	/*sf::RectangleShape rect;
+	rect.setOutlineColor(sf::Color::Black);
+	rect.setOutlineThickness(1);*/
+	int index = 0;
+	for (auto data = datasets.begin(); data != datasets.end(); data++) {
+		for (int i = 0; i < data->second.size(); i++) {
+			if (data->second[i] < yTickStart || i * classWidth < xTickStart) continue;
+			graphs[index] = sf::VertexArray(sf::Quads, 4 * (data->second.size() - i));
+			break;
+		}
+
+		for (int i = 0; i < data->second.size(); i++) {
+			if (data->second[i] < yTickStart || i * classWidth < xTickStart) continue;
+			float width = xTickSpacing / (xScale * datasets.size());
+			float height = data->second[i] * yTickSpacing / yScale;
+			float x = graphXPosition + width * (i * datasets.size() + index);
+			float y = graphYPosition + graphHeight - height;
+			graphs[index][i * 4].position = sf::Vector2f(x, y);
+			graphs[index][i * 4 + 1].position = sf::Vector2f(x + width, y);
+			graphs[index][i * 4 + 2].position = sf::Vector2f(x + width, y + height);
+			graphs[index][i * 4 + 3].position = sf::Vector2f(x, y + height);
+			for (int j = 0; j < 4; j++)
+				graphs[index][i * 4 + j].color = colors[data->first];
+		}
+		index++;
+	}
+}
+
 void Histogram::UpdateGraphSettings() {
 	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
 	boundingBox.setFillColor(sf::Color::White);
@@ -66,27 +96,14 @@ void Histogram::DrawGraph(sf::RenderWindow& window) {
 	TextRenderer::RenderText(graphXPosition + graphWidth * 0.5 - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - TextRenderer::text.getLocalBounds().height - 20);
 
 	// Rectangles
-	sf::RectangleShape rect;
-	rect.setOutlineColor(sf::Color::Black);
-	rect.setOutlineThickness(1);
-	int index = 0;
-	for (auto data = datasets.begin(); data != datasets.end(); data++) {
-		rect.setFillColor(colors[data->first]);
-		for (int i = 0; i < data->second.size(); i++) {
-			if (data->second[i] < yTickStart || i * classWidth < xTickStart) continue;
-			rect.setSize(sf::Vector2f(xTickSpacing / (xScale * datasets.size()), data->second[i] * yTickSpacing / yScale));
-			rect.setPosition(graphXPosition + rect.getSize().x * (i * datasets.size() + index), graphYPosition + graphHeight - rect.getSize().y);
-			window.draw(rect);
-		}
-		index++;
-	}
+	for (auto& graph : graphs) window.draw(graph);
 
 	// Legend
 	sf::RectangleShape icon(sf::Vector2f(legendFontSize, legendFontSize));
 	icon.setOutlineColor(sf::Color::Black);
 	icon.setOutlineThickness(1);
 	TextRenderer::SetFontSize(legendFontSize);
-	index = 0;
+	int index = 0;
 	for (auto color = colors.begin(); color != colors.end(); color++) {
 		icon.setFillColor(color->second);
 		icon.setPosition(graphXPosition + graphWidth - 100, graphYPosition + 20 + index * 30);

@@ -90,7 +90,7 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLi
 	TextRenderer::SetString(heading);
 	TextRenderer::RenderText(graphXPosition + graphWidth * 0.5 - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - TextRenderer::text.getLocalBounds().height - 20);
 
-	// Line
+	// Point
 	if (drawPoints) {
 		sf::CircleShape point(3, 8);
 		point.setOrigin(3, 3);
@@ -111,9 +111,10 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLi
 			graphIndex++;
 		}
 	}
+	// Line
 	if (drawLines) {
-		for (int i = 0; i < graphs.size(); i++)
-			window.draw(graphs[i]);
+		for (auto& graph : graphs)
+			window.draw(graph);
 	}
 
 	// Legend
