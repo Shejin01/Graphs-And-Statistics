@@ -9,7 +9,7 @@ private:
 	sf::VertexArray tick{sf::Lines};
 	int xTickAmount = 0, yTickAmount = 0;
 	std::vector<sf::VertexArray> graphs;
-	sf::VertexArray outline{sf::Lines};
+	sf::VertexArray outline{sf::LinesStrip};
 public:
 	std::unordered_map<std::string, std::vector<float>> datasets;
 	std::unordered_map<std::string, sf::Color> colors;

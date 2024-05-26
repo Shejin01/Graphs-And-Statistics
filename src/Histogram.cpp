@@ -11,14 +11,13 @@ void Histogram::AddData(std::string datasetName, float value) {
 
 void Histogram::UpdateGraph() {
 	graphs = std::vector<sf::VertexArray>(datasets.size());
-	/*sf::RectangleShape rect;
-	rect.setOutlineColor(sf::Color::Black);
-	rect.setOutlineThickness(1);*/
 	int index = 0;
 	for (auto data = datasets.begin(); data != datasets.end(); data++) {
+		int totalVertexAmount = 0;
 		for (int i = 0; i < data->second.size(); i++) {
 			if (data->second[i] < yTickStart || i * classWidth < xTickStart) continue;
 			graphs[index] = sf::VertexArray(sf::Quads, 4 * (data->second.size() - i));
+			totalVertexAmount += 4 * (data->second.size() - i);
 			break;
 		}
 
@@ -28,13 +27,17 @@ void Histogram::UpdateGraph() {
 			float height = data->second[i] * yTickSpacing / yScale;
 			float x = graphXPosition + width * (i * datasets.size() + index);
 			float y = graphYPosition + graphHeight - height;
-			graphs[index][i * 4].position = sf::Vector2f(x, y);
-			graphs[index][i * 4 + 1].position = sf::Vector2f(x + width, y);
-			graphs[index][i * 4 + 2].position = sf::Vector2f(x + width, y + height);
-			graphs[index][i * 4 + 3].position = sf::Vector2f(x, y + height);
-			for (int j = 0; j < 4; j++)
+			graphs[index][i * 4].position = sf::Vector2f(x, y + height);
+			graphs[index][i * 4 + 1].position = sf::Vector2f(x, y);
+			graphs[index][i * 4 + 2].position = sf::Vector2f(x + width, y);
+			graphs[index][i * 4 + 3].position = sf::Vector2f(x + width, y + height);
+			for (int j = 0; j < 4; j++) {
 				graphs[index][i * 4 + j].color = colors[data->first];
+				outline.append(graphs[index][i * 4 + j]);
+				outline[outline.getVertexCount() - 1].color = sf::Color::Black;
+			}
 		}
+		outline.append(graphs[index][0]);
 		index++;
 	}
 }
@@ -97,6 +100,7 @@ void Histogram::DrawGraph(sf::RenderWindow& window) {
 
 	// Rectangles
 	for (auto& graph : graphs) window.draw(graph);
+	window.draw(outline);
 
 	// Legend
 	sf::RectangleShape icon(sf::Vector2f(legendFontSize, legendFontSize));
