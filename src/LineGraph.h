@@ -1,18 +1,24 @@
 #pragma once
 
-#include "Statistics.h"
+#include "Graph.h"
 #include "TextRenderer.h"
 
-class LineGraph {
+class LineGraph : public Graph {
 private:
 	sf::RectangleShape boundingBox;
 	sf::VertexArray tick{ sf::Lines };
 	int xTickAmount = 0, yTickAmount = 0;
 	std::vector<sf::VertexArray> graphs;
 public:
+	class Point {
+	public:
+		float x, y;
+		std::string label;
+		Point(float x, float y, std::string label = "") : x(x), y(y), label(label) {}
+	};
+
 	std::unordered_map<std::string, std::vector<Point>> datasets;
-	std::unordered_map<std::string, sf::Color> colors;
-	std::string xLabel = "X axis", yLabel = "Y axis", heading = "";
+	std::string xLabel = "X axis", yLabel = "Y axis";
 	float xScale = 1, yScale = 1;
 	float xTickSpacing = 40, yTickSpacing = 40;
 	float graphWidth = 500, graphHeight = 500;

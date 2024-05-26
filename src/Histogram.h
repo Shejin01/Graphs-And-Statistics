@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Statistics.h"
+#include "Graph.h"
 #include "TextRenderer.h"
 
-class Histogram {
+class Histogram : public Graph {
 private:
 	sf::RectangleShape boundingBox;
 	sf::VertexArray tick{sf::Lines};
@@ -12,8 +12,7 @@ private:
 	sf::VertexArray outline{sf::LinesStrip};
 public:
 	std::unordered_map<std::string, std::vector<float>> datasets;
-	std::unordered_map<std::string, sf::Color> colors;
-	std::string xLabel = "Class Interval", yLabel = "Frequency", heading = "";
+	std::string xLabel = "Class Interval", yLabel = "Frequency";
 	float xScale = 1, yScale = 1;
 	float xTickSpacing = 40, yTickSpacing = 40;
 	float graphWidth = 500, graphHeight = 500;

@@ -1,4 +1,4 @@
-#include "Statistics.h"
+#include "Graph.h"
 
 std::string RemoveTrailingZeroes(std::string number) {
 	int size = static_cast<int>(number.length());
