@@ -35,8 +35,8 @@ void LineGraph::UpdateGraph() {
 
 void LineGraph::UpdateGraphSettings() {
 	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
-	boundingBox.setFillColor(sf::Color::White);
-	boundingBox.setOutlineColor(sf::Color::Black);
+	boundingBox.setFillColor(backgroundColor);
+	boundingBox.setOutlineColor(outlineColor);
 	boundingBox.setOutlineThickness(1);
 	boundingBox.setPosition(graphXPosition, graphYPosition);
 
@@ -44,6 +44,7 @@ void LineGraph::UpdateGraphSettings() {
 	yTickAmount = graphHeight / yTickSpacing;
 
 	tick.clear();
+	grid.clear();
 	for (int i = 0; i < xTickAmount; i++) {
 		tick.append(sf::Vertex(
 			sf::Vector2f(graphXPosition + i * xTickSpacing, graphYPosition + graphHeight - 10),
@@ -51,6 +52,13 @@ void LineGraph::UpdateGraphSettings() {
 		));
 		tick.append(tick[tick.getVertexCount() - 1]);
 		tick[tick.getVertexCount() - 1].position.y += 20;
+
+		grid.append(sf::Vertex(
+			sf::Vector2f(graphXPosition + i * xTickSpacing, graphYPosition + graphHeight),
+			sf::Color(128, 128, 128)
+		));
+		grid.append(grid[grid.getVertexCount() - 1]);
+		grid[grid.getVertexCount() - 1].position.y -= graphHeight;
 	}
 
 	for (int i = 0; i < yTickAmount; i++) {
@@ -60,6 +68,13 @@ void LineGraph::UpdateGraphSettings() {
 		));
 		tick.append(tick[tick.getVertexCount() - 1]);
 		tick[tick.getVertexCount() - 1].position.x += 20;
+
+		grid.append(sf::Vertex(
+			sf::Vector2f(graphXPosition, graphYPosition + graphHeight - i * yTickSpacing),
+			sf::Color(128, 128, 128)
+		));
+		grid.append(grid[grid.getVertexCount() - 1]);
+		grid[grid.getVertexCount() - 1].position.x += graphWidth;
 	}
 }
 
@@ -67,6 +82,7 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLi
 	window.draw(boundingBox);
 
 	// Ticks
+	window.draw(grid);
 	window.draw(tick);
 	TextRenderer::SetFontSize(tickFontSize);
 	for (int i = 0; i < xTickAmount; i++) {
