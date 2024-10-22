@@ -44,8 +44,8 @@ void Histogram::UpdateGraph() {
 
 void Histogram::UpdateGraphSettings() {
 	boundingBox = sf::RectangleShape(sf::Vector2f(graphWidth, graphHeight));
-	boundingBox.setFillColor(sf::Color::White);
-	boundingBox.setOutlineColor(sf::Color::Black);
+	boundingBox.setFillColor(backgroundColor);
+	boundingBox.setOutlineColor(outlineColor);
 	boundingBox.setOutlineThickness(1);
 	boundingBox.setPosition(graphXPosition, graphYPosition);
 
@@ -60,6 +60,13 @@ void Histogram::UpdateGraphSettings() {
 		));
 		tick.append(tick[tick.getVertexCount() - 1]);
 		tick[tick.getVertexCount() - 1].position.y += 20;
+
+		grid.append(sf::Vertex(
+			sf::Vector2f(graphXPosition + i * xTickSpacing, graphYPosition + graphHeight),
+			gridColor
+		));
+		grid.append(grid[grid.getVertexCount() - 1]);
+		grid[grid.getVertexCount() - 1].position.y -= graphHeight;
 	}
 	for (int i = 0; i < yTickAmount; i++) {
 		tick.append(sf::Vertex(
@@ -68,11 +75,21 @@ void Histogram::UpdateGraphSettings() {
 		));
 		tick.append(tick[tick.getVertexCount() - 1]);
 		tick[tick.getVertexCount() - 1].position.x += 20;
+
+		grid.append(sf::Vertex(
+			sf::Vector2f(graphXPosition, graphYPosition + graphHeight - i * yTickSpacing),
+			gridColor
+		));
+		grid.append(grid[grid.getVertexCount() - 1]);
+		grid[grid.getVertexCount() - 1].position.x += graphWidth;
 	}
 }
 
-void Histogram::DrawGraph(sf::RenderWindow& window) {
+void Histogram::DrawGraph(sf::RenderWindow& window, bool drawGrid) {
 	window.draw(boundingBox);
+
+	// Grid
+	if(drawGrid) window.draw(grid);
 
 	// Ticks
 	TextRenderer::SetFontSize(tickFontSize);

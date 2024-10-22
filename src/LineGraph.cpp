@@ -55,7 +55,7 @@ void LineGraph::UpdateGraphSettings() {
 
 		grid.append(sf::Vertex(
 			sf::Vector2f(graphXPosition + i * xTickSpacing, graphYPosition + graphHeight),
-			sf::Color(128, 128, 128)
+			gridColor
 		));
 		grid.append(grid[grid.getVertexCount() - 1]);
 		grid[grid.getVertexCount() - 1].position.y -= graphHeight;
@@ -71,18 +71,20 @@ void LineGraph::UpdateGraphSettings() {
 
 		grid.append(sf::Vertex(
 			sf::Vector2f(graphXPosition, graphYPosition + graphHeight - i * yTickSpacing),
-			sf::Color(128, 128, 128)
+			gridColor
 		));
 		grid.append(grid[grid.getVertexCount() - 1]);
 		grid[grid.getVertexCount() - 1].position.x += graphWidth;
 	}
 }
 
-void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLines) {
+void LineGraph::DrawGraph(sf::RenderWindow& window, int drawFlags) {
 	window.draw(boundingBox);
 
+	// Grid
+	if (drawFlags & FLAG_DRAW_GRID) window.draw(grid);
+
 	// Ticks
-	window.draw(grid);
 	window.draw(tick);
 	TextRenderer::SetFontSize(tickFontSize);
 	for (int i = 0; i < xTickAmount; i++) {
@@ -107,7 +109,7 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLi
 	TextRenderer::RenderText(graphXPosition + graphWidth * 0.5 - TextRenderer::text.getLocalBounds().width * 0.5, graphYPosition - TextRenderer::text.getLocalBounds().height - 20);
 
 	// Point
-	if (drawPoints) {
+	if (drawFlags & FLAG_DRAW_POINTS) {
 		sf::CircleShape point(3, 8);
 		point.setOrigin(3, 3);
 		int graphIndex = 0;
@@ -128,7 +130,7 @@ void LineGraph::DrawGraph(sf::RenderWindow& window, bool drawPoints, bool drawLi
 		}
 	}
 	// Line
-	if (drawLines) {
+	if (drawFlags & FLAG_DRAW_LINES) {
 		for (auto& graph : graphs)
 			window.draw(graph);
 	}
