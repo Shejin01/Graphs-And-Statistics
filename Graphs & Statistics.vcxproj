@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\BoxGraph.cpp" />
     <ClCompile Include="src\Histogram.cpp" />
     <ClCompile Include="src\LineGraph.cpp" />
     <ClCompile Include="src\main.cpp" />
@@ -155,6 +156,7 @@
     <ClCompile Include="src\TextRenderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\BoxGraph.h" />
     <ClInclude Include="src\Histogram.h" />
     <ClInclude Include="src\LineGraph.h" />
     <ClInclude Include="src\PieChart.h" />

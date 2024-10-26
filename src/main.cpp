@@ -10,6 +10,7 @@
 int WIDTH = 1366, HEIGHT = 697;
 int FPS = 60;
 
+void UpdateSineGraph(LineGraph& lineGraph, float& t);
 void TestCase1(LineGraph& lineGraph);
 
 int main() {
@@ -18,7 +19,7 @@ int main() {
 	sf::RenderWindow window(sf::VideoMode(WIDTH, HEIGHT), "Graphs & Statistics", 7U, settings);
 	window.setFramerateLimit(FPS);
 
-	/*LineGraph lineGraph;
+	LineGraph lineGraph;
 	lineGraph.graphXPosition = 183;
 	lineGraph.heading = "Graph";
 	lineGraph.CreateDataSet("Sine Wave", sf::Color::Black);
@@ -32,7 +33,7 @@ int main() {
 	pieChart.AddData("Red", 90, sf::Color::Red);
 	pieChart.AddData("Green", 70, sf::Color::Green);
 	pieChart.AddData("Blue", 40, sf::Color::Blue);
-	pieChart.UpdateGraph();*/
+	pieChart.UpdateGraph();
 	
 	Histogram histogram;
 	histogram.heading = "Histogram";
@@ -59,13 +60,7 @@ int main() {
 	while (window.isOpen()) {
 		start = std::chrono::high_resolution_clock::now();
 
-		/*lineGraph.AddData("Sine Wave", t * 0.1, sin(t * 0.1) + 5);
-		lineGraph.AddData("Cosine Wave", t * 0.1, cos(t * 0.1) + 5);
-		t++;
-		if (lineGraph.datasets["Sine Wave"].size() > 200) lineGraph.datasets["Sine Wave"].erase(lineGraph.datasets["Sine Wave"].begin());
-		if (lineGraph.datasets["Cosine Wave"].size() > 200) lineGraph.datasets["Cosine Wave"].erase(lineGraph.datasets["Cosine Wave"].begin());
-		if (t * 0.1 > lineGraph.graphWidth / lineGraph.xTickSpacing) lineGraph.xTickStart += 0.1;
-		lineGraph.UpdateGraph();*/
+		//UpdateSineGraph(lineGraph, t);
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -84,8 +79,8 @@ int main() {
 		}
 
 		window.clear(sf::Color(139, 240, 72));
-		/*lineGraph.DrawGraph(window);
-		pieChart.DrawGraph(window);*/
+		//lineGraph.DrawGraph(window);
+		//pieChart.DrawGraph(window);
 		histogram.DrawGraph(window, true);
 		window.display();
 
@@ -95,6 +90,16 @@ int main() {
 	}
 
 	return 0;
+}
+
+void UpdateSineGraph(LineGraph& lineGraph, float& t) {
+	lineGraph.AddData("Sine Wave", t * 0.1, sin(t * 0.1) + 5);
+	lineGraph.AddData("Cosine Wave", t * 0.1, cos(t * 0.1) + 5);
+	t++;
+	if (lineGraph.datasets["Sine Wave"].size() > 200) lineGraph.datasets["Sine Wave"].erase(lineGraph.datasets["Sine Wave"].begin());
+	if (lineGraph.datasets["Cosine Wave"].size() > 200) lineGraph.datasets["Cosine Wave"].erase(lineGraph.datasets["Cosine Wave"].begin());
+	if (t * 0.1 > lineGraph.graphWidth / lineGraph.xTickSpacing) lineGraph.xTickStart += 0.1;
+	lineGraph.UpdateGraph();
 }
 
 void TestCase1(LineGraph& lineGraph) {
