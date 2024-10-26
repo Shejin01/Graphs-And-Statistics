@@ -6,11 +6,13 @@
 class Histogram : public BoxGraph {
 private:
 	sf::VertexArray outline{sf::LinesStrip};
+	void DrawTicks(sf::RenderWindow& window);
+	void DrawRectangles(sf::RenderWindow& window);
 public:
 	std::unordered_map<std::string, std::vector<float>> datasets;
-	std::string xLabel = "Class Interval", yLabel = "Frequency";
 	float classWidth = 5;
 
+	Histogram();
 	void CreateDataSet(std::string datasetName, sf::Color color);
 	void AddData(std::string datasetName, float value);
 	void UpdateGraph();

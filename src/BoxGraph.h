@@ -11,6 +11,7 @@ private:
 	int xTickAmount = 0, yTickAmount = 0;
 	std::vector<sf::VertexArray> graphs;
 public:
+	std::string xLabel = "X axis", yLabel = "Y axis";
 	float xScale = 1, yScale = 1;
 	float xTickSpacing = 40, yTickSpacing = 40;
 	float graphWidth = 500, graphHeight = 500;
@@ -23,6 +24,8 @@ public:
 		gridColor = sf::Color(128, 128, 128);
 
 	void UpdateGraphSettings();
+	void DrawText(sf::RenderWindow& window);
+	void DrawLegend(sf::RenderWindow& window);
 
 	friend class LineGraph;
 	friend class Histogram;

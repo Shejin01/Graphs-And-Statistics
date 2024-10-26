@@ -60,7 +60,7 @@ int main() {
 	while (window.isOpen()) {
 		start = std::chrono::high_resolution_clock::now();
 
-		//UpdateSineGraph(lineGraph, t);
+		UpdateSineGraph(lineGraph, t);
 
 		sf::Event event;
 		while (window.pollEvent(event)) {
@@ -79,9 +79,9 @@ int main() {
 		}
 
 		window.clear(sf::Color(139, 240, 72));
-		//lineGraph.DrawGraph(window);
+		lineGraph.DrawGraph(window);
 		//pieChart.DrawGraph(window);
-		histogram.DrawGraph(window, true);
+		//histogram.DrawGraph(window, true);
 		window.display();
 
 		end = std::chrono::high_resolution_clock::now();

@@ -4,6 +4,10 @@
 #include "TextRenderer.h"
 
 class LineGraph : public BoxGraph {
+private:
+	void DrawTicks(sf::RenderWindow& window);
+	void DrawPoints(sf::RenderWindow& window);
+	void DrawLines(sf::RenderWindow& window);
 public:
 	class Point {
 	public:
@@ -19,8 +23,6 @@ public:
 	};
 
 	std::unordered_map<std::string, std::vector<Point>> datasets;
-	std::string xLabel = "X axis", yLabel = "Y axis";
-
 	void CreateDataSet(std::string datasetName, sf::Color color);
 	void AddData(std::string datasetName, float x, float y, std::string label = "");
 	void UpdateGraph();
